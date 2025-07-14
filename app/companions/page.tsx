@@ -1,4 +1,4 @@
-const Companion = () => {
+const Companions = () => {
     return(
         <div>
             <h1>companion</h1>
@@ -6,4 +6,4 @@ const Companion = () => {
     )
 }
 
-export default Companion;
+export default Companions;
