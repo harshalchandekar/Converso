@@ -70,7 +70,7 @@ useEffect(() => {
     vapi.off('speech-end', onSpeechEnd);
     }
 
-}, []);
+}, [companionId]);
 
 const toggleMicrophone = () => {
     const isMuted = vapi.isMuted();
@@ -87,7 +87,7 @@ const handleCall = async() => {
             serverMessages : [],
         }
 
-        // @ts-expect-error
+        // @ts-expect-error - assistantOverrides type mismatch with Vapi SDK overload
         vapi.start(configureAssistant(voice,style), assistantOverrides);
 }
 

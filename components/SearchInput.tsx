@@ -12,28 +12,28 @@ const SearchInput = () => {
     const searchParams = useSearchParams();
     const query = searchParams.get('topic') || ''; 
 
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery, setSearchQuery] = useState(query);
 
-      useEffect(() => {
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(() => {
+            if(searchQuery){
+                const newUrl = formUrlQuery({
+                    params: searchParams.toString(),
+                    key: "topic",
+                    value: searchQuery,
+                });
+                router.push(newUrl, {scroll: false});
+            } else {
+                const newUrl = removeKeysFromUrlQuery({
+                    params: searchParams.toString(),
+                    keysToRemove: ["topic"],
+                });
+                router.push(newUrl, { scroll: false });
+            }
+        }, 500);
 
-     const delayDebounceFn = setTimeout(() => {
-        if(searchQuery){
-         const newUrl = formUrlQuery({
-        params: searchParams.toString(),
-        key: "topic",
-        value: searchQuery,
-});
-   router.push(newUrl, {scroll: false});
-} else {
-    const newUrl = removeKeysFromUrlQuery({
-  params: searchParams.toString(),
-  keysToRemove: ["topic"],
-});
-
-router.push(newUrl, { scroll: false });
-}
-}, 500);
-}, [searchQuery, router, searchParams, pathName]);
+        return () => clearTimeout(delayDebounceFn);
+    }, [searchQuery, router, searchParams, pathName]);
 
     return (
         <div className="relative border border-black

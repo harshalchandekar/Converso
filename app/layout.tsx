@@ -10,8 +10,11 @@ const bricolage = Bricolage_Grotesque({
 });
 
 export const metadata: Metadata = {
-  title: "Converso",
-  description: "Real-time AI Teaching Platform",
+  title: {
+    default: "Vocalutor — Talk to an AI tutor out loud",
+    template: "%s | Vocalutor",
+  },
+  description: "Talk to an AI tutor out loud. Pick a subject, start a voice session, and learn by conversation instead of reading.",
 };
 
 export default function RootLayout({
