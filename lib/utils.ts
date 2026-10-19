@@ -10,7 +10,11 @@ export const getSubjectColor = (subject: string) => {
   return subjectsColors[subject as keyof typeof subjectsColors];
 };
 
-export const configureAssistant = (voice: string, style: string) => {
+export const configureAssistant = (
+  voice: string,
+  style: string,
+  maxDurationSeconds?: number
+) => {
   const voiceId =
     voices[voice as keyof typeof voices][
       style as keyof (typeof voices)[keyof typeof voices]
@@ -20,6 +24,8 @@ export const configureAssistant = (voice: string, style: string) => {
     name: "Companion",
     firstMessage:
       "Hello, let's start the session. Today we'll be talking about {{topic}}.",
+    // Vapi server-side maximum call duration guardrail (hard limit enforced by Vapi telephony)
+    maxDurationSeconds: maxDurationSeconds ? Math.max(10, Math.floor(maxDurationSeconds)) : undefined,
     transcriber: {
       provider: "deepgram",
       model: "nova-3",

@@ -1,5 +1,6 @@
 import CompanionComponent from "@/components/CompanionComponents";
 import { getCompanion } from "@/lib/actions/companion.actions";
+import { getVoiceQuota } from "@/lib/actions/voice.actions";
 import { getSubjectColor } from "@/lib/utils";
 import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
@@ -14,10 +15,12 @@ const CompanionSession = async({params} : CompanionSessionPageProps) => {
     const companion = await getCompanion(id);
     const user = await currentUser();
 
-    const {name, subject, topic, duration} = companion;
-
     if(!user) redirect('/sign-in');
-    if(!name) redirect ('/companions');
+    if(!companion || !companion.name) redirect ('/companions');
+
+    const quota = await getVoiceQuota();
+
+    const {name, subject, topic, duration} = companion;
 
         
 
@@ -47,8 +50,9 @@ const CompanionSession = async({params} : CompanionSessionPageProps) => {
             <CompanionComponent
             {...companion}
             companionId={id}
-            userName={user.firstName!}
-            userImage={user.imageUrl!} />
+            userName={user.firstName || "Student"}
+            userImage={user.imageUrl || "/icons/cap.svg"}
+            initialQuota={quota} />
         </main>
     )
 }

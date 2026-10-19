@@ -80,4 +80,13 @@ interface CompanionComponentProps {
   userImage: string;
   voice: string;
   style: string;
+  initialQuota?: {
+    plan: "free" | "pro";
+    dailySeconds: number;
+    usedSeconds: number;
+    remainingSeconds: number;
+    maxSessionSeconds: number;
+    allowed: boolean;
+    resetsAtFormatted?: string;
+  };
 }

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { SignInButton, SignedOut, UserButton, SignedIn } from "@clerk/nextjs";
 import NavItems from "./NavItems";
 import Logo from "./Logo";
+import UsageMeter from "./UsageMeter";
 
 const NavBar = () => {
     return(
@@ -11,7 +12,7 @@ const NavBar = () => {
                 <Logo />
             </div>
         </Link>
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-4 sm:gap-6">
            <NavItems />
             <SignedOut>
                 <SignInButton>
@@ -19,6 +20,7 @@ const NavBar = () => {
                 </SignInButton>
             </SignedOut>
             <SignedIn>
+                <UsageMeter />
                 <UserButton />
             </SignedIn>
         </div>

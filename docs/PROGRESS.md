@@ -114,8 +114,14 @@ Enforced in `lib/actions/companion.actions.ts` via `newCompanionPermissions()`:
 
 ## Phase Tracker
 - [x] **Phase 0: Audit** (Complete)
-- [ ] **Phase 1: Rebrand & Base Design System** (UI layout preserved per user instruction; tokens, metadata & logo components prepared)
-- [ ] **Phase 2: Feature 1 - Voice-Minute Guardrails** (Limits config, quota calculation, migration, Server Actions, countdown timer, header meter)
+- [x] **Phase 1: Rebrand & Base Design System** (Complete: Vocalutor metadata, original SVG Logo component, reusable UI components card/badge/skeleton/empty-state, clean lint/types)
+- [x] **Phase 2: Feature 1 - Voice-Minute Guardrails** (Complete)
+  - `lib/limits.ts`: Configuration of Free (15 min/day, 8 min/call) and Pro (60 min/day, 20 min/call) limits.
+  - `lib/compute-quota.ts`: Pure function calculating remaining allowance, session limit, and start permission.
+  - `supabase/migrations/20261019150000_voice_usage.sql`: `voice_usage` table with RLS matching Clerk user claims.
+  - `lib/actions/voice.actions.ts`: `getVoiceQuota` (rolling 24h sum) and `recordVoiceUsage` (Zod-validated insertion).
+  - `components/CompanionComponents.tsx`: Live countdown timer, quota block alerts, Vapi telephony max duration passing (`maxDurationSeconds`), and graceful end session triggers.
+  - `components/UsageMeter.tsx`: Header usage meter in navbar displaying daily voice minutes used.
 - [ ] **Phase 3: Feature 3 - Learning Dashboard** (Aggregation queries, user_settings table, timezone streak calculation, Recharts charts, goal updates)
 - [ ] **Phase 4: Feature 2 - AI Session Recap + Quiz** (Final transcripts capture, session_recaps table, Gemini Flash integration, Zod validation, retry logic, /sessions/[id] review page)
 - [ ] **Phase 5: Tests, CI & Code Hygiene** (Vitest unit tests, Playwright smoke test, GitHub Actions CI workflow, .env.example)
