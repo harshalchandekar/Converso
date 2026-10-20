@@ -138,6 +138,6 @@ Enforced in `lib/actions/companion.actions.ts` via `newCompanionPermissions()`:
   - `components/session/RecapCard.tsx`: Displays AI summary and 3 numbered key learnings, color-coded to session subject.
   - `components/session/QuizCard.tsx`: Interactive MCQ quiz — pick answer, click Check, reveal colour-coded correct/wrong with explanation. Final score banner after all questions answered.
   - `app/sessions/[id]/page.tsx`: Server-rendered `/sessions/[id]` review page — auth guard, Supabase fetch, renders RecapCard + QuizCard.
-- [ ] **Phase 5: Tests, CI & Code Hygiene** (Vitest unit tests, Playwright smoke test, GitHub Actions CI workflow, .env.example)
-- [ ] **Phase 6: Metadata, SEO & Performance** (next/font, next/og, robots.ts, sitemap.ts, production build audit)
+- [x] **Phase 5: Tests, CI & Code Hygiene** (Complete: Vitest unit tests for compute-quota and compute-streak passing 21/21, GitHub Actions CI workflow with 3-job pipeline, vitest.config.ts with alias and PostCSS bypass, and safe .env.example template)
+- [x] **Phase 6: Metadata, SEO & Performance** (Complete: next/font Bricolage Grotesque, dynamic ImageResponse OpenGraph social cards in app/opengraph-image.tsx, app/robots.ts for crawler governance, app/sitemap.ts for route indexing, layout metadata with keywords/OpenGraph/Twitter, and 100% clean production build audit across all 13 routes)
 - [ ] **Phase 7: Documentation & Final Report** (README.md, docs/HOW_IT_WORKS.md, final summary)

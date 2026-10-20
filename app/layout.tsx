@@ -10,11 +10,40 @@ const bricolage = Bricolage_Grotesque({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL || "https://vocalutor.vercel.app"
+  ),
   title: {
     default: "Vocalutor — Talk to an AI tutor out loud",
     template: "%s | Vocalutor",
   },
-  description: "Talk to an AI tutor out loud. Pick a subject, start a voice session, and learn by conversation instead of reading.",
+  description:
+    "Talk to an AI tutor out loud. Pick a subject, start a voice session, and learn by conversation instead of reading.",
+  keywords: [
+    "AI tutor",
+    "voice learning",
+    "conversational AI",
+    "interactive education",
+    "Vocalutor",
+    "Vapi AI",
+    "Gemini Flash",
+  ],
+  authors: [{ name: "Harshal Chandekar" }],
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "/",
+    siteName: "Vocalutor",
+    title: "Vocalutor — Talk to an AI tutor out loud",
+    description:
+      "Pick a subject, start a real-time voice session, and learn with an AI tutor through natural spoken conversation.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Vocalutor — Talk to an AI tutor out loud",
+    description:
+      "Pick a subject, start a real-time voice session, and learn with an AI tutor through natural spoken conversation.",
+  },
 };
 
 export default function RootLayout({
