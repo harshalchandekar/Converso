@@ -6,19 +6,18 @@ import { cn } from "@/lib/utils";
 
 interface QuizCardProps {
   quiz: QuizQuestion[];
-  subject: string;
+  subject?: string;
 }
 
 type AnswerState = "unanswered" | "correct" | "wrong";
 
-export const QuizCard = ({ quiz, subject }: QuizCardProps) => {
+export const QuizCard = ({ quiz }: QuizCardProps) => {
   const [selected, setSelected] = useState<(number | null)[]>(
     () => new Array(quiz.length).fill(null)
   );
   const [revealed, setRevealed] = useState<boolean[]>(
     () => new Array(quiz.length).fill(false)
   );
-  const [showAll, setShowAll] = useState(false);
 
   const score = quiz.reduce((acc, q, i) => {
     return revealed[i] && selected[i] === q.correctIndex ? acc + 1 : acc;
