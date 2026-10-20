@@ -122,7 +122,13 @@ Enforced in `lib/actions/companion.actions.ts` via `newCompanionPermissions()`:
   - `lib/actions/voice.actions.ts`: `getVoiceQuota` (rolling 24h sum) and `recordVoiceUsage` (Zod-validated insertion).
   - `components/CompanionComponents.tsx`: Live countdown timer, quota block alerts, Vapi telephony max duration passing (`maxDurationSeconds`), and graceful end session triggers.
   - `components/UsageMeter.tsx`: Header usage meter in navbar displaying daily voice minutes used.
-- [ ] **Phase 3: Feature 3 - Learning Dashboard** (Aggregation queries, user_settings table, timezone streak calculation, Recharts charts, goal updates)
+- [x] **Phase 3: Feature 3 - Learning Dashboard** (Complete)
+  - `lib/compute-streak.ts`: Pure function calculating active day-streaks across local calendar days with timezone support and boundary handling.
+  - `supabase/migrations/20261019160000_user_settings.sql`: `user_settings` table for weekly goal minutes and client timezone with RLS.
+  - `lib/actions/dashboard.actions.ts`: Server-side aggregation queries for total minutes, weekly sessions, streaks, subject breakdown, and 14-day activity trend; Zod-validated goal updates.
+  - `components/dashboard/`: Recharts-powered `SubjectChart` and `ActivityChart` dynamically imported (`ssr: false`), `GoalProgressRing`, `GoalForm`, and `TimezoneSync`.
+  - `app/dashboard/page.tsx`: Server-rendered `/dashboard` route with auth protection and private metadata (`noindex`).
+  - `components/NavItems.tsx`: Added Dashboard navigation link.
 - [ ] **Phase 4: Feature 2 - AI Session Recap + Quiz** (Final transcripts capture, session_recaps table, Gemini Flash integration, Zod validation, retry logic, /sessions/[id] review page)
 - [ ] **Phase 5: Tests, CI & Code Hygiene** (Vitest unit tests, Playwright smoke test, GitHub Actions CI workflow, .env.example)
 - [ ] **Phase 6: Metadata, SEO & Performance** (next/font, next/og, robots.ts, sitemap.ts, production build audit)

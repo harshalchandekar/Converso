@@ -7,8 +7,8 @@ import { usePathname } from "next/navigation";
 const navItems = [
     {label: 'Home', href:'/'},
     {label:'Companions', href:'/companions'},
+    {label:'Dashboard', href:'/dashboard'},
     {label:'My Journey', href:'/my-journey'},
-
 ]
 
 const NavItems = () => {
@@ -21,7 +21,7 @@ const pathName = usePathname();
         <Link
          href={href} 
         key={label}
-         className={cn(pathName === href && "text-priamry font-semibold")}>
+         className={cn(pathName === href && "text-primary font-semibold")}>
             {label}
         </Link>
        ))}
