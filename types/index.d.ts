@@ -90,3 +90,24 @@ interface CompanionComponentProps {
     resetsAtFormatted?: string;
   };
 }
+
+// ── Phase 4: AI Session Recap ─────────────────────────────────────
+interface QuizQuestion {
+  question: string;
+  options: [string, string, string, string]; // always 4 choices
+  correctIndex: number; // 0-3
+  explanation: string;
+}
+
+interface SessionRecap {
+  id: string;
+  sessionId: string | null;
+  userId: string;
+  companionId: string;
+  subject: string;
+  topic: string;
+  summary: string;
+  keyLearnings: string[]; // 3 bullet-point insights
+  quiz: QuizQuestion[];   // 3 MCQ questions
+  createdAt: string;
+}

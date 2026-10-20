@@ -9,6 +9,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import soundwaves from "@/constants/soundwaves.json";
 import { addToSessionHistory } from "@/lib/actions/companion.actions";
 import { recordVoiceUsage } from "@/lib/actions/voice.actions";
+import { generateSessionRecap } from "@/lib/actions/recap.actions";
 
 enum CallStatus {
     INACTIVE = 'INACTIVE',
@@ -39,6 +40,9 @@ const CompanionComponent = ({
     const [isMuted, setIsMuted] = useState(false);
     const [messages, setMessages] = useState<SavedMessage[]>([]);
     const [endReason, setEndReason] = useState<string | null>(null);
+    // Recap state: null = not generated, string = recap ID, 'error' = failed silently
+    const [recapId, setRecapId] = useState<string | null>(null);
+    const [isGeneratingRecap, setIsGeneratingRecap] = useState(false);
 
     // Track transcripts for AI session recap
     const transcriptsRef = useRef<TranscriptItem[]>([]);
@@ -75,6 +79,9 @@ const CompanionComponent = ({
             elapsedSeconds = Math.max(1, Math.round((Date.now() - callStartTimeRef.current) / 1000));
         }
 
+        // Capture transcript snapshot before async operations
+        const transcriptSnapshot = [...transcriptsRef.current];
+
         try {
             if (elapsedSeconds > 0) {
                 await recordVoiceUsage({
@@ -86,7 +93,23 @@ const CompanionComponent = ({
         } catch (err) {
             console.error("Error finalizing call usage:", err);
         }
-    }, [companionId]);
+
+        // Generate AI recap in background (non-blocking — won't affect session save)
+        if (transcriptSnapshot.length >= 4) {
+            setIsGeneratingRecap(true);
+            generateSessionRecap({
+                companionId,
+                subject,
+                topic,
+                transcript: transcriptSnapshot,
+            })
+                .then((recap) => {
+                    if (recap?.id) setRecapId(recap.id);
+                })
+                .catch(() => { /* silently ignore */ })
+                .finally(() => setIsGeneratingRecap(false));
+        }
+    }, [companionId, subject, topic]);
 
     // Active session countdown timer
     useEffect(() => {
@@ -217,6 +240,38 @@ const CompanionComponent = ({
             {endReason && (
                 <div className="bg-neutral-100 border border-neutral-300 rounded-xl p-3 text-neutral-800 text-xs font-medium">
                     ⏱️ {endReason}
+                </div>
+            )}
+
+            {/* View Recap button — appears after session finishes */}
+            {callStatus === CallStatus.FINISHED && (
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-xl p-4">
+                    <div className="flex-1">
+                        <p className="font-semibold text-sm text-neutral-900">Session Complete 🎉</p>
+                        <p className="text-xs text-neutral-500 mt-0.5">
+                            {isGeneratingRecap
+                                ? "Generating your AI recap and quiz..."
+                                : recapId
+                                ? "Your recap is ready — review key learnings and test yourself!"
+                                : transcriptsRef.current.length < 4
+                                ? "Talk more in your next session to unlock AI recaps!"
+                                : "Recap generation failed — try again next session."}
+                        </p>
+                    </div>
+                    {recapId && !isGeneratingRecap && (
+                        <Link
+                            href={`/sessions/${recapId}`}
+                            className="shrink-0 inline-flex items-center gap-2 bg-[#FE5933] hover:bg-[#e04825] text-white text-xs font-semibold px-4 py-2.5 rounded-lg transition"
+                        >
+                            View Recap &amp; Quiz →
+                        </Link>
+                    )}
+                    {isGeneratingRecap && (
+                        <div className="shrink-0 flex items-center gap-2 text-xs text-neutral-500 bg-white border border-neutral-200 px-4 py-2.5 rounded-lg">
+                            <span className="size-3 rounded-full bg-[#FE5933] animate-pulse" />
+                            Generating...
+                        </div>
+                    )}
                 </div>
             )}
 

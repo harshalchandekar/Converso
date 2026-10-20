@@ -129,7 +129,15 @@ Enforced in `lib/actions/companion.actions.ts` via `newCompanionPermissions()`:
   - `components/dashboard/`: Recharts-powered `SubjectChart` and `ActivityChart` dynamically imported (`ssr: false`), `GoalProgressRing`, `GoalForm`, and `TimezoneSync`.
   - `app/dashboard/page.tsx`: Server-rendered `/dashboard` route with auth protection and private metadata (`noindex`).
   - `components/NavItems.tsx`: Added Dashboard navigation link.
-- [ ] **Phase 4: Feature 2 - AI Session Recap + Quiz** (Final transcripts capture, session_recaps table, Gemini Flash integration, Zod validation, retry logic, /sessions/[id] review page)
+- [x] **Phase 4: Feature 2 - AI Session Recap + Quiz** (Complete)
+  - `@google/genai` SDK installed for Gemini Flash integration.
+  - `supabase/migrations/002_session_recaps.sql`: `session_recaps` table with JSONB columns for `key_learnings` and `quiz`, RLS policies, and performance indexes.
+  - `lib/actions/recap.actions.ts`: `generateSessionRecap` (Gemini Flash call → Zod validation → Supabase insert), `getSessionRecap`, `getUserRecaps` server actions. Graceful null-return on failure so session always saves.
+  - `types/index.d.ts`: Added `QuizQuestion` and `SessionRecap` global interfaces.
+  - `components/CompanionComponents.tsx`: After `call-end`, transcript snapshot passed to `generateSessionRecap` as a non-blocking background promise. `recapId` state drives a "View Recap & Quiz →" button that appears on session completion.
+  - `components/session/RecapCard.tsx`: Displays AI summary and 3 numbered key learnings, color-coded to session subject.
+  - `components/session/QuizCard.tsx`: Interactive MCQ quiz — pick answer, click Check, reveal colour-coded correct/wrong with explanation. Final score banner after all questions answered.
+  - `app/sessions/[id]/page.tsx`: Server-rendered `/sessions/[id]` review page — auth guard, Supabase fetch, renders RecapCard + QuizCard.
 - [ ] **Phase 5: Tests, CI & Code Hygiene** (Vitest unit tests, Playwright smoke test, GitHub Actions CI workflow, .env.example)
 - [ ] **Phase 6: Metadata, SEO & Performance** (next/font, next/og, robots.ts, sitemap.ts, production build audit)
 - [ ] **Phase 7: Documentation & Final Report** (README.md, docs/HOW_IT_WORKS.md, final summary)
